@@ -254,17 +254,6 @@ require('lazy').setup({
       },
     },
   },
-  {
-    'mfussenegger/nvim-dap',
-  },
-  {
-    'rcarriga/nvim-dap-ui', -- Added by Jack.
-    requires = { 'mfussenegger/nvim-dap' },
-    config = function()
-      require('dapui').setup()
-    end,
-  },
-
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -613,6 +602,16 @@ require('lazy').setup({
           end,
         },
       }
+    end,
+  },
+  {
+    'rcarriga/nvim-dap-ui', -- Added by Jack.
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'jay-babu/mason-nvim-dap.nvim', -- Added by Jack. Must come after mason, then nvim-dap,
+    },
+    config = function()
+      require('dapui').setup()
     end,
   },
 
