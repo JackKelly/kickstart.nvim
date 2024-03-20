@@ -255,6 +255,12 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
+  -- Added by Jack:
+  {
+    'nvim-telescope/telescope-file-browser.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+  },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
   --    require('gitsigns').setup({ ... })
@@ -625,6 +631,7 @@ require('lazy').setup({
   {
     'rcarriga/nvim-dap-ui', -- Added by Jack.
     dependencies = {
+      'nvim-neotest/nvim-nio', -- Added by Jack 2024-03-20
       'mfussenegger/nvim-dap',
       'jay-babu/mason-nvim-dap.nvim', -- Added by Jack. Must come after mason, then nvim-dap,
     },
@@ -931,6 +938,10 @@ require('lazy').setup({
     },
   },
 })
+
+-- open file_browser with the path of the current buffer
+-- Added by Jack.
+vim.api.nvim_set_keymap('n', '<space>fb', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', { noremap = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
