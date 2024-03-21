@@ -660,6 +660,25 @@ require('lazy').setup({
     },
   },
 
+  -- Added by Jack:
+  {
+    'smoka7/multicursors.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'smoka7/hydra.nvim',
+    },
+    opts = {},
+    cmd = { 'MCstart', 'MCvisual', 'MCclear', 'MCpattern', 'MCvisualPattern', 'MCunderCursor' },
+    keys = {
+      {
+        mode = { 'v', 'n' },
+        '<Leader>m',
+        '<cmd>MCstart<cr>',
+        desc = 'Create a selection for selected text or word under the cursor',
+      },
+    },
+  },
+
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -942,6 +961,10 @@ require('lazy').setup({
 -- open file_browser with the path of the current buffer
 -- Added by Jack.
 vim.api.nvim_set_keymap('n', '<space>fb', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', { noremap = true })
+
+-- Added by Jack to allow for a buffer to be closed without also closing the window.
+-- Adapted from https://www.reddit.com/r/neovim/comments/s4jt9n/comment/hsrepd8/
+vim.api.nvim_set_keymap('n', '<leader>q', ':enew<bar>bd #<CR>', { noremap = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
