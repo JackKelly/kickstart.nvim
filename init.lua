@@ -966,5 +966,9 @@ vim.api.nvim_set_keymap('n', '<space>fb', ':Telescope file_browser path=%:p:h se
 -- Adapted from https://www.reddit.com/r/neovim/comments/s4jt9n/comment/hsrepd8/
 vim.api.nvim_set_keymap('n', '<leader>q', ':enew<bar>bd #<CR>', { noremap = true })
 
+-- Added by Jack to enable spell checking:
+vim.opt.spelllang = 'en_gb'
+vim.opt.spell = true
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
