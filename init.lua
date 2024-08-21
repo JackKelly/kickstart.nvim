@@ -975,8 +975,10 @@ vim.opt.spell = true
 -----------------------------------------------------------------------
 ------------ RUST DEBUGGING DAP ---------------------------------------
 ------------ Adapted from https://kurotych.com/posts/rust_neovim_debugger/
+------------ and from https://vi.stackexchange.com/questions/43037/unable-to-use-nvim-dap-with-codelldb/43073#43073
 local dap = require 'dap'
 local mason_registry = require 'mason-registry'
+
 local codelldb_root = mason_registry.get_package('codelldb'):get_install_path() .. '/extension/'
 local codelldb_path = codelldb_root .. 'adapter/codelldb'
 local liblldb_path = codelldb_root .. 'lldb/lib/liblldb.so'
@@ -996,7 +998,9 @@ dap.configurations.rust = {
     type = 'codelldb',
     request = 'launch',
     program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      -- Adapted from https://github.com/jay-babu/mason-nvim-dap.nvim/issues/107
+      local buf_dir = vim.fn.expand '%:p:h'
+      return vim.fn.input('Path to executable: ', buf_dir, 'file')
     end,
     cwd = '${workspaceFolder}',
     stopOnEntry = false,
@@ -1030,5 +1034,9 @@ end)
 vim.keymap.set('n', '<Leader>dc', function() -- Dapui Close
   require('dapui').close()
 end)
+vim.keymap.set('n', '<Leader>d?', function() -- Eval var under cursor
+  require('dapui').eval(nil, { enter = true })
+end)
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
