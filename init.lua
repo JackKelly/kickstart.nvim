@@ -972,5 +972,63 @@ vim.api.nvim_set_keymap('n', '<leader>q', ':enew<bar>bd #<CR>', { noremap = true
 vim.opt.spelllang = 'en_gb'
 vim.opt.spell = true
 
+-----------------------------------------------------------------------
+------------ RUST DEBUGGING DAP ---------------------------------------
+------------ Adapted from https://kurotych.com/posts/rust_neovim_debugger/
+local dap = require 'dap'
+local mason_registry = require 'mason-registry'
+local codelldb_root = mason_registry.get_package('codelldb'):get_install_path() .. '/extension/'
+local codelldb_path = codelldb_root .. 'adapter/codelldb'
+local liblldb_path = codelldb_root .. 'lldb/lib/liblldb.so'
+dap.adapters.codelldb = {
+  type = 'server',
+  port = '${port}',
+  host = '127.0.0.1',
+  executable = {
+    command = codelldb_path,
+    args = { '--liblldb', liblldb_path, '--port', '${port}' },
+  },
+}
+
+dap.configurations.rust = {
+  {
+    name = 'Launch file',
+    type = 'codelldb',
+    request = 'launch',
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+  },
+}
+
+vim.keymap.set('n', '<F5>', function()
+  dap.continue()
+end)
+vim.keymap.set('n', '<F10>', function()
+  dap.step_over()
+end)
+vim.keymap.set('n', '<F11>', function()
+  dap.step_into()
+end)
+vim.keymap.set('n', '<F12>', function()
+  dap.step_out()
+end)
+vim.keymap.set('n', '<Leader>b', function()
+  dap.toggle_breakpoint()
+end)
+vim.keymap.set('n', '<Leader>dl', function()
+  dap.run_last()
+end)
+vim.keymap.set('n', '<Leader>df', function()
+  require('dapui').float_element('scopes', { enter = true })
+end)
+vim.keymap.set('n', '<Leader>do', function() -- Dapui Open
+  require('dapui').open()
+end)
+vim.keymap.set('n', '<Leader>dc', function() -- Dapui Close
+  require('dapui').close()
+end)
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
